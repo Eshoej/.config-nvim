@@ -23,18 +23,23 @@ lsp_zero.extend_lspconfig({
   lsp_attach = lsp_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
-
+require'lspconfig'.gdscript.setup{}
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = {'lua_ls', 'ts_ls', 'gopls', 'marksman'},
+  ensure_installed = {'lua_ls', 'gopls', 'marksman'},
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
     end,
   }
 })
+
+local pipepath = vim.fn.stdpath("cache") .. "/server.pipe"
+if not vim.loop.fs_stat(pipepath) then
+  vim.fn.serverstart(pipepath)
+end
 
 lsp_zero.format_on_save({
 	format_opts = {
