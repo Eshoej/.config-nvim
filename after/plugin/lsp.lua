@@ -43,7 +43,7 @@ lsp_zero.format_on_save({
 	},
 	servers = {
 		['elixirls'] = {'elixir', 'heex'},
-        ['ts_ls'] = {'typescript', 'javascript'},
+        --['ts_ls'] = {'typescript', 'javascript'},
         ['gopls'] = {'go'},
 	}
 })
@@ -78,6 +78,14 @@ cmp.setup({
 	['<C-y>'] = cmp.mapping.confirm(),
 	['<C-Space>'] = cmp.mapping.complete(),
   }),
+})
+
+-- Prettier as formatter
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.json", "*.css", "*.html", "*.yaml", "*.md" },
+    callback = function()
+        vim.lsp.buf.format({ async = false })
+    end,
 })
 
 require("mason").setup()
