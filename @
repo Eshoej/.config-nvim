@@ -47,7 +47,6 @@ lsp_zero.format_on_save({
 		timeout_ms = 10000
 	},
 	servers = {
-        ['lua_ls'] = {'lua'},
 		['elixirls'] = {'elixir', 'heex'},
         --['ts_ls'] = {'typescript', 'javascript'},
         ['gopls'] = {'go'},
@@ -86,11 +85,26 @@ cmp.setup({
   }),
 })
 
+local function has_prettierrc()
+    local root_files = { ".prettierrc", ".prettierrc.json", ".prettierrc.js", ".prettierrc.yaml", ".prettierrc.yml", "prettier.config.js" }
+    local root_dir = vim.fn.getcwd() -- Gets the current working directory (you can adjust this if needed)
+    
+    for _, file in ipairs(root_files) do
+        if vim.fn.filereadable(root_dir .. "/" .. file) == 1 then
+            return true
+        end
+    end
+    
+    return false
+end
+
 -- Prettier as formatter
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.json", "*.css", "*.html", "*.yaml", "*.md" },
     callback = function()
-        vim.lsp.buf.format({ async = false })
+        if has_prettierrc() then
+            vim.lsp.buf.format({ async = false })
+        end
     end,
 })
 
