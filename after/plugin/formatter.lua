@@ -4,6 +4,7 @@ require("conform").setup({
         lsp_format = "fallback",
     },
     formatters_by_ft = {
+        go = { "gofmt" },
         lua = { "lua_ls" },
         -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
@@ -12,6 +13,8 @@ require("conform").setup({
         -- Conform will run the first available formatter
         javascript = { "prettierd", "prettier", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
+        html = { "html" },
+        yaml = { "yamlfix" },
     },
 })
 
